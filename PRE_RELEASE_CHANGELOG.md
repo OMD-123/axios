@@ -6,6 +6,8 @@
 
 ## Bug Fixes
 
+- **Fetch response-stream capability probe:** Cancelled the `ReadableStream` created by the `supportsResponseStream` capability probe in the fetch adapter. The probe body was left uncancelled, so its pull promise stayed pending for the lifetime of the module realm and leaked one async resource per realm. This is the sibling of the request-stream probe leak fixed in v1.14.0, which did not cover the response probe. The cleanup is best-effort and shared by both probes: a probe body whose `cancel()` throws or rejects no longer downgrades the detected stream capability, and a rejected cancellation no longer surfaces as an unhandled rejection. No public API, type, or configuration changes. (closes [#11240](https://github.com/axios/axios/issues/11240))
+
 ## Documentation
 
 - **README sponsor name:** Corrected sponsor name typo `BSAP SE` → `SAP SE` in the README sponsor listing. This updates sponsor recognition only, with no runtime, public API, or type compatibility changes. ([#11373](https://github.com/axios/axios/pull/11373))
